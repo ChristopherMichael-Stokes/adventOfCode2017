@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/chris/programming/day6/day6.cc
+iostream
+-
+fstream
+-
+vector
+-
+algorithm
+-
+memory
+-
+list
+-
+
