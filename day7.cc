@@ -27,14 +27,15 @@ public:
 	const std::string &get_name() const { return name; }
 	int get_weight() const { return weight; }
 	~program() {
-		if (children.size() == 0) 
-			return;
-		for (program * p: children) {
-			children.erase(p);
+		std::set<program *>::iterator it = children.begin();
+		program *p;
+		while (children.size()>0) {
+			p = *it;
+			it = children.erase(it);
 			if (p->amount_children()>0)
 				p->~program();
 			delete p;
-		}		
+		}
 	}
 };
 
