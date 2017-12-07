@@ -74,7 +74,22 @@ void read_program_tree(std::istream & is, program_tree & programs)
 
 	}
 
-	std::cout << ps.begin()->second->get_name()<< '\n';
+	for (const std::string & s : lines) {
+		char buffer[500], name_buffer[100];
+		memset(buffer, '\0', 500);
+		sscanf(s.c_str(), "%s (%*d) -> %[^\n]",name_buffer,buffer);
+		std::vector<std::string> tokens;
+		std::string children = buffer;
+		std::string::const_iterator end, start = children.cbegin();
+
+		do {
+			end = std::find(start,s.cend(),", ");
+			tokens.push_back(std::string(start,end));
+			start = end;
+		} while (end != s.cend());
+		std::cout << tokens[0] << '\n';
+	}
+	//std::cout << ps.begin()->second->get_name()<< '\n';
 				
 }
 
