@@ -22,7 +22,7 @@ public:
 
 	void add_child(program * p) { p->parent = this; children.insert(p); }
 	std::set<program *> &get_children() { return children; }
-	
+	program * get_parent() const { return parent; }
 	const std::string &get_name() const { return name; }
 	int get_weight() const { return weight; }
 	~program() {
@@ -57,6 +57,11 @@ public:
 			p->add_child(head);
 		head = p;
 	}
+	void set_head(program * p) {
+		if (nullptr != head)
+			p->add_child(head);
+		head = p;
+	}
 };
 
 void read_program_tree(std::istream & is, program_tree & programs)
@@ -79,24 +84,34 @@ void read_program_tree(std::istream & is, program_tree & programs)
 		memset(buffer, '\0', 500);
 		sscanf(s.c_str(), "%s (%*d) -> %[^\n]",name_buffer,buffer);
 		std::vector<std::string> tokens;
+		if (strlen(buffer) == 0)
+			continue;
 		std::string children = buffer;
-		std::string::const_iterator end, start = children.cbegin();
-
+		const std::string delim = ", ";
+		std::size_t start = 0, end;	
 		do {
-			end = std::find(start,s.cend(),", ");
-			tokens.push_back(std::string(start,end));
-			start = end;
-		} while (end != s.cend());
-		std::cout << tokens[0] << '\n';
+			end = children.find(delim, start);
+			std::size_t altend = end == std::string::npos 
+						? children.size() : end;
+			tokens.push_back(std::string(children.cbegin()+start,children.cbegin()+altend));
+			start = end+delim.size();
+		} while (end != std::string::npos);
+		for (std::string & tok : tokens) {
+			ps.at(name_buffer)->add_child(ps.at(tok));
+		}
 	}
-	//std::cout << ps.begin()->second->get_name()<< '\n';
+	for(auto& p : ps) {
+		program* cp = p.second;
+		if (cp->get_parent() == nullptr) {
+			programs.set_head(cp);
+		}
+	}
 				
 }
 
 const std::string & part1(program_tree & programs) 
 {
 
-	programs.set_head("new head",10);
 	return programs.root()->get_name();
 }
 
