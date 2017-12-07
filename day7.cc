@@ -22,20 +22,20 @@ public:
 
 	void add_child(program * p) { p->parent = this; children.insert(p); }
 	std::set<program *> &get_children() { return children; }
+	std::size_t amount_children() { return children.size(); }
 	program * get_parent() const { return parent; }
 	const std::string &get_name() const { return name; }
 	int get_weight() const { return weight; }
 	~program() {
-		for (auto & p: children) {
-			if (p->children.size() == 0)
-				delete p;
-			else {
+		if (children.size() == 0) 
+			return;
+		for (program * p: children) {
+			children.erase(p);
+			if (p->amount_children()>0)
 				p->~program();
-				delete p;
-			}
-		}
+			delete p;
+		}		
 	}
-
 };
 
 class program_tree {
@@ -62,6 +62,10 @@ public:
 			p->add_child(head);
 		head = p;
 	}
+	~program_tree() {
+		head->~program();
+		delete head;
+	}
 };
 
 void read_program_tree(std::istream & is, program_tree & programs)
@@ -76,7 +80,6 @@ void read_program_tree(std::istream & is, program_tree & programs)
 		int weight;
 		sscanf(s.c_str(), "%s (%d)",name_buffer,&weight);
 		ps[name_buffer] = new program(name_buffer,weight);
-
 	}
 
 	for (const std::string & s : lines) {
@@ -104,9 +107,9 @@ void read_program_tree(std::istream & is, program_tree & programs)
 		program* cp = p.second;
 		if (cp->get_parent() == nullptr) {
 			programs.set_head(cp);
+			break;
 		}
 	}
-				
 }
 
 const std::string & part1(program_tree & programs) 
