@@ -2,23 +2,21 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <list>
 
 class stack {
 private:
-	int multiplier, _score;
-	std::list<char> state;
+	int multiplier, _score, state;
 public:
 	int garbage;
-	stack() : multiplier{ 0 }, _score{ 0 }, garbage{ 0 }{}
-	void push(char c) { 
-		state.push_back(c); 
+	stack() : multiplier{ 0 }, _score{ 0 }, garbage{ 0 }, state{ 0 }{}
+	void push() { 
+		++state;
 		++multiplier;
 	}
 	void pop() {
-		if (state.empty())
+		if (0 == state)
 			return;
-		state.pop_back();
+		--state;
 		_score += multiplier;
 		--multiplier;
 	}
@@ -30,7 +28,7 @@ void eval_stream(const std::string & input, stack & st)
 	std::istringstream iss(input);
 	for (char c; iss >> c; ) {
 		if ('{' == c) {
-			st.push(c);
+			st.push();
 		} else if ('}' == c) {
 			st.pop();	
 		} else if ('<' == c) {
