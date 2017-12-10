@@ -77,7 +77,7 @@ std::string part2(std::string lengths)
 	return hexstring.str(); 
 }
 
-int main(int argc, char** argv)
+int main()
 {
 	std::ifstream file("input.txt");
 	std::string inputs;
