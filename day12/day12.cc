@@ -11,7 +11,6 @@
 std::set<int> group(const std::map<int,std::vector<int>> & inputs,
 		const int id)
 {
-	int program_count = 0;	
 	std::set<int> visited_nodes;
 	std::queue<int> visiting_nodes;
 	const auto& programs = inputs.at(id);
