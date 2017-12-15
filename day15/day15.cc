@@ -31,14 +31,11 @@ int part2(const std::pair<int, int> & input)
 		 b_value = (input.second*b_factor)%divisor;
 	int matches = 0;
 	for (int pairs = 0; pairs < 5e6; ++pairs) {
-		do {
-			a_value = (a_factor*a_value) % divisor;
-		} while (a_value % a_multiple != 0);
+		do a_value = (a_factor*a_value) % divisor;
+		while (a_value % a_multiple != 0);
 
-		do {
-			b_value = (b_factor*b_value) % divisor;
-		} while (b_value % b_multiple != 0) ;
-
+		do b_value = (b_factor*b_value) % divisor;
+		while (b_value % b_multiple != 0) ;
 
 		matches += ((a_value&mask)==(b_value&mask));
 
@@ -51,10 +48,10 @@ void read_input(std::istream& is, std::pair<int, int> & input)
 	int x;
 	std::string s;
 	std::getline(is, s);
-	sscanf(s.c_str(), "%*s %*s %*s %*s %d", &x);
+	sscanf(s.c_str(), "%*[^0-9]%d", &x);
 	input.first = x;
 	std::getline(is, s);
-	sscanf(s.c_str(), "%*s %*s %*s %*s %d", &x);
+	sscanf(s.c_str(), "%*[^0-9]%d", &x);
 	input.second = x;
 }
 
